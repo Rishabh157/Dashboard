@@ -1,89 +1,53 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const PORT = 4000;
 const app = express();
 
 /****** MONGODB CONNCECTIONS  *****/
 const connectDb = require("./DB/connecrion");
-const vendors = require("./Schemas/vendors");
+const vendorSchema = require("./Schemas/vendors");
 
 connectDb()
 
 /*****  Middlewares  *****/
 app.use(bodyParser.json())
+app.use(cors())
 
 app.get("/", (req, res) => {
     res.send({ msg: "OK", data: ["Addicted of INOVATION TECH MYSTRY"] })
 })
 
+/****** Add Vendors Api ********/
+app.post("/submit-vendors-details", (req, res) => {
 
-app.post("/short-add-vendors", (req, res) => {
-    let {
-        name: { first, middle, last },
-        phone: { mob, mobalter },
-        govinfo: { pan, aadhar, address }
-    } = req.body
-
-    let AddVendors = new vendors({
-        name: { first, middle, last },
-        phone: { mob, mobalter },
-        govinfo: { pan, aadhar, address }
+    let { firstName, ...data } = req.body
+    // console.log(firstName, data)
+    let newVendors = new vendorSchema({
+        firstName, ...data
     })
 
-    AddVendors.save().then((result) => {
-        res.send({ msg: "SUCCESFULLY SAVED VENDORS DETAILS", data: result })
-    }).catch((err) => {
-        res.send({ msg: "SERVER ERROR", err })
-    })
-})
-
-
-app.post("/find-vendors", (req, res) => {
-    let { _id } = req.body
-
-    vendors.findById(_id)
+    newVendors.save()
         .then((result) => {
-            res.send({ msg: "FOUNDED", data: result })
+            res.send({ serverKey: "success", msg: "Successfully Vendor Add", data: result })
         }).catch((err) => {
-            res.send({ msg: "NOT FOUNDED", data: err })
-        })
+            res.send({ serverKey: "error", msg: "Something Went Wrong", data: err.message })
+        });
 })
 
 
+/****** Search Vendors Api ********/
 
+app.post("/get-vendor-today", (req, res) => {
+    let { firstName } = req.body
 
-app.post("/add-vendors", (req, res) => {
+    vendorSchema.find({ firstName })
+        .then((result) => {
+            res.send({ msg: "Successfully Find Vendor in Database", data: result })
+        }).catch((err) => {
+            res.send({ msg: "error", data: err })
+        });
 
-    // let { firstName,
-    //     middleName,
-    //     lastName,
-    //     catogary,
-    //     phone,
-    //     email,
-    //     pan,
-    //     aadhar,
-    //     address,
-    //     alterNum } = req.body
-
-    // let AddVendors = new vendors({
-    //     firstName,
-    //     middleName,
-    //     lastName,
-    //     catogary,
-    //     phone,
-    //     email,
-    //     pan,
-    //     aadhar,
-    //     address,
-    //     alterNum
-    // })
-
-
-    // AddVendors.save().then((result) => {
-    //     res.send({ msg: "SUCCESFULLY SAVED VENDORS DETAILS", data: result })
-    // }).catch((err) => {
-    //     res.send({ msg: "SERVER ERROR", err })
-    // })
 })
 
 
