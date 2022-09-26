@@ -7,6 +7,7 @@ const app = express();
 /****** MONGODB CONNCECTIONS  *****/
 const connectDb = require("./DB/connecrion");
 const vendorSchema = require("./Schemas/vendors");
+const itemsSchema = require("./Schemas/items");
 
 connectDb()
 
@@ -23,11 +24,11 @@ app.post("/submit-vendors-details", (req, res) => {
 
     let { firstName, ...data } = req.body
     // console.log(firstName, data)
-    let newVendors = new vendorSchema({
+    let addVendors = new vendorSchema({
         firstName, ...data
     })
 
-    newVendors.save()
+    addVendors.save()
         .then((result) => {
             res.send({ serverKey: "success", msg: "Successfully Vendor Add", data: result })
         }).catch((err) => {
@@ -39,6 +40,7 @@ app.post("/submit-vendors-details", (req, res) => {
 /****** Search Vendors Api ********/
 
 app.post("/get-vendor-today", (req, res) => {
+
     let { firstName } = req.body
 
     vendorSchema.find({ firstName })
@@ -49,6 +51,37 @@ app.post("/get-vendor-today", (req, res) => {
         });
 
 })
+
+
+app.post("/add-items", (req, res) => {
+    const { txnid, date, catogary, items } = req.body
+    // console.log(items)
+
+    let addItems = new itemsSchema({
+        txnid, date, catogary, items
+    })
+
+    addItems.save().then((result) => {
+        res.send({ msg: "Items Add SuccessFully", data: result })
+    }).catch((err) => {
+        res.send({ msg: "items are not added", data: err })
+    })
+})
+
+
+app.post("/get-items-details", (req, res) => {
+    let { txnid } = req.body
+
+    itemsSchema.find({ txnid }).then((result) => {
+        res.send({ msg: "Items Found SuccessFully", data: result })
+    }).catch((err) => {
+        res.send({ msg: "items are not Finded", data: err })
+    })
+})
+
+
+
+
 
 
 app.listen(PORT, () => {

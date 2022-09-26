@@ -41,6 +41,11 @@
     font-size: 1.1rem; */
 }
 
+/** Add Papers Input form width **/
+.form-control {
+    width: 50%;
+}
+
 /** NavigationDash file style Start **/
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap'); */
 

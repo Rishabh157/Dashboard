@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AddPapers from './components/AddPapers';
+// import AddPapers from './components/AddPapers';
 import SidePanel from './components/SidePanel';
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
         <Routes>
           <Route path="/" index element={<SidePanel />}></Route>
           <Route path="/add-vendors" element={<SidePanel />}></Route>
-          <Route path="/add-papers" element={<AddPapers />}></Route>
+          {/* <Route path="/add-papers" element={<AddPapers />}></Route> */}
         </Routes>
       </BrowserRouter>
     </>

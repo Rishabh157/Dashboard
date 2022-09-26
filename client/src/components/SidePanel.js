@@ -1,7 +1,8 @@
 import React from 'react';
 import "./Styles/style.css";
 import DashOption from './DashOption';
-import AddVendorsForm from "./AddVendorsForm";
+// import AddVendorsForm from "./AddVendorsForm";
+import AddPapers from './AddPapers';
 import { Avatar, Button } from '@mui/material';
 import { deepOrange } from "@mui/material/colors"
 import AddIcon from '@mui/icons-material/Add';
@@ -69,7 +70,8 @@ export default function SidePanel() {
 
                     </div>
                     {/* ADD-VENDORS-FORMS */}
-                    <AddVendorsForm />
+                    {/* <AddVendorsForm /> */}
+                    <AddPapers />
                 </div>
             </div>
         </div>
