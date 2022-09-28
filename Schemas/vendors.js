@@ -82,7 +82,8 @@ const vendorsSchema = mongoose.Schema({
             type: String,
             required: [true, "Vendor Address is Required"]
         },
-    }
+    },
+    items: [Object]
 })
 
 module.exports = mongoose.model("Vendors", vendorsSchema)

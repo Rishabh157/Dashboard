@@ -1,8 +1,3 @@
-/**  Login file Style Start **/
-/* .main-height {
-    height: 100vh;
-} */
-
 /**  AdminPanel file Style Start **/
 
 .dash-heading {
@@ -30,15 +25,17 @@
 
 .title {
     font-size: 15px;
-    font-family: 'Roboto', sans-serif;
+    /* font-weight: 600; */
+    font-family: 'Roboto Slab', serif;
+}
+
+.title:hover {
+    cursor: pointer;
 }
 
 /** Dashboard Navbar-Top style Start **/
 .MuiAvatar-root:hover {
     cursor: pointer;
-    /* width: 34px;
-    height: 34px;
-    font-size: 1.1rem; */
 }
 
 /** Add Papers Input form width **/
@@ -46,29 +43,27 @@
     width: 50%;
 }
 
-/** NavigationDash file style Start **/
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap'); */
+/* EntriesVendor Forms  */
 
-/* .dashboard-url span {
-    color: #2c0f0f;
-    font-weight: 500;
-    font-size: 15px;
-    font-family: 'Roboto', sans-serif;
-} */
-
-/* .dashboard-url span:hover {
-    color: blue;
-    cursor: pointer;
-} */
+.venIn {
+    display: flex;
+    justify-content: center;
+    width: "30%";
+}
 
 
+.halo::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
 
+.venSlect {
+    width: 25%;
+}
 
-/* AddVENDORSFORM  */
-.FormClass {
-    margin-top: 20px;
-    /* background-color: #D9D9D9; */
-    height: 100vh;
-    width: 100%;
-    padding: 40px;
+th {
+    font-family: 'Abyssinica SIL', serif;
+}
+
+td {
+    font-family: 'Abyssinica SIL', serif;
 }

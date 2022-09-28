@@ -9,10 +9,11 @@ const items = mongoose.Schema({
         type: String,
         required: [true, "today date is required"]
     },
-    catogary: String,
-    items: [
-        {}
-    ]
+    catogary: {
+        type: String,
+        required: [true, "vendor catogary type is required"]
+    },
+    items: [Object]
 })
 
 module.exports = mongoose.model("ItemsVendor", items);
