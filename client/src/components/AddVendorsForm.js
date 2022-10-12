@@ -50,7 +50,7 @@ export default function AddVendorsForm() {
 
     const submitVendorsForm = () => {
 
-        axios.post("http://127.0.0.1:4000/submit-vendors-details", {
+        axios.post("http://127.0.0.1:5000/submit-vendors-details", {
             firstName, middleName, lastName, catogary, location,
             infoVendor: {
                 email, aadhar, panCard, address, mobile, phone,

@@ -4,6 +4,7 @@ import { Paper, Button } from "@mui/material";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { getFullTimeLine, getTotal } from "./validations/date";
+import ManIcon from '@mui/icons-material/Man';
 
 export default class AntriesOfPapers extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ export default class AntriesOfPapers extends Component {
 
             this.setState({ dataForTable: newDataTable })
 
-            axios.post("http://127.0.0.1:4000/add-papers-forms", { _id, newObj })
+            axios.post("http://127.0.0.1:5000/add-papers-forms", { _id, newObj })
                 .then((result) => {
                     console.log(result.data)
                 }).catch((err) => {
@@ -47,9 +48,6 @@ export default class AntriesOfPapers extends Component {
         } else {
             toast.error("Enter a valid rate and quantity")
         }
-
-
-
     }
     render() {
         return (
@@ -61,11 +59,19 @@ export default class AntriesOfPapers extends Component {
                         <div className="p-5">
 
                             <div className="row">
-                                <div className="col-md-3">
-                                    <p>Hello {this.state.firstName}</p>
-                                    {/* <p>Your Location is MOHU NAKA</p> */}
+                                <div className="col-md-5">
+                                    {this.state.showInfoVendor.map((ele, ind) => {
+                                        return (
+                                            <div key={ind}>
+                                                <span className="badge bg-dark me-2">ID : {ele._id}</span> <br />
+                                                <span className="badge bg-dark me-2">Type : {ele.catogary}</span>
+                                                <span className="badge bg-dark me-2">Email : {ele.infoVendor.email}</span> <br />
+                                                <span className="badge bg-dark">Phone : {ele.infoVendor.phone}</span>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                                <div className="col-md-6 d-flex">
+                                <div className="col-md-7 d-flex">
                                     <input onChange={(e) => this.setState({ firstName: e.target.value })}
                                         className="form-control text-center halo me-4"
                                         list="all-countries"
@@ -75,7 +81,8 @@ export default class AntriesOfPapers extends Component {
                                         {this.state.existingVendorsList.map((ele, ind) => {
                                             let { firstName, middleName, lastName, catogary } = ele
                                             return (
-                                                <option key={ind} value={ele.firstName}>{firstName} {middleName} {lastName} {catogary}</option>
+                                                <option key={ind} value={ele.firstName}>{firstName} {middleName} {lastName} {catogary}
+                                                </option>
                                             )
                                         })}
                                     </datalist>
@@ -84,31 +91,31 @@ export default class AntriesOfPapers extends Component {
                                         onClick={() => {
                                             let { firstName } = this.state
                                             if (firstName !== "") {
-                                                axios.post("http://127.0.0.1:4000/get-vendor-today", { firstName })
+                                                axios.post("http://127.0.0.1:5000/get-vendor-today", { firstName })
                                                     .then(result => {
                                                         let arr = result.data.vendor
                                                         this.setState({ showInfoVendor: arr, _id: arr[0]._id, showTable: true, dataForTable: arr[0].items })
                                                     })
                                                     .catch(err => toast.error(err))
                                             } else {
-                                                toast.error("Enter The Vendor Name First")
+                                                toast('Enter Vendor Name First!',
+                                                    {
+                                                        icon: <ManIcon />,
+                                                        style: {
+                                                            borderRadius: '30px',
+                                                            background: '#333',
+                                                            color: '#fff',
+                                                            fontFamily: "'Ubuntu', sans-serif"
+                                                        },
+                                                        duration: 1500,
+                                                    }
+                                                );
                                             }
                                         }}
                                         variant="contained">
                                         Add
                                     </Button>
 
-                                </div>
-                                <div className="col-md-3">
-                                    {this.state.showInfoVendor.map((ele, ind) => {
-                                        return (
-                                            <div key={ind}>
-                                                <span className="badge bg-dark">ID : {ele._id}</span> <br />
-                                                <span className="badge bg-dark">Location : {ele.location}</span>
-                                                <span className="badge bg-dark">type : {ele.catogary}</span>
-                                            </div>
-                                        )
-                                    })}
                                 </div>
                             </div>
 
@@ -164,10 +171,10 @@ export default class AntriesOfPapers extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            ) : <p className='text-center mt-5'>ENTER THE VALID VENDOR NAME</p>}
+                            ) : null}
                         </div>
                     </Paper>
-                </div>
+                </div >
 
                 <table className="table table-hover mt-5">
                     <thead>
@@ -177,7 +184,6 @@ export default class AntriesOfPapers extends Component {
                             <th scope="col">items</th>
                             <th scope="col">quantity</th>
                             <th scope="col">rate</th>
-                            <th scope="col">discount</th>
                             <th scope="col">total</th>
                         </tr>
                     </thead>
@@ -190,22 +196,27 @@ export default class AntriesOfPapers extends Component {
                                     <td>{ele.paper}</td>
                                     <td>{ele.quantity}</td>
                                     <td>{ele.rate}</td>
-                                    <td>{ele.discount}</td>
                                     <td>{ele.total}</td>
                                 </tr>
                             )
                         })}
                     </tbody>
                 </table>
-            </div>
+            </div >
         )
     }
     async componentDidMount() {
         let todayDate = getFullTimeLine()
+        const location = await localStorage.getItem("location")
+
         this.setState({ date: todayDate })
-        await axios.post("http://127.0.0.1:4000/get-all-vendors-name")
-            .then((result) => {
-                this.setState({ existingVendorsList: result.data.vendors })
+
+        await axios.post("http://127.0.0.1:5000/get-all-vendors-name")
+            .then(async (result) => {
+                const sorteByLocation = await result.data.vendors.filter(arr => {
+                    return arr.location == location
+                })
+                this.setState({ existingVendorsList: sorteByLocation })
             }).catch((err) => {
                 console.log(err)
             });
